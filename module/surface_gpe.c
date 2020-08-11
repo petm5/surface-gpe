@@ -301,6 +301,13 @@ MODULE_DESCRIPTION("Surface GPE/Lid Driver");
 MODULE_VERSION("0.1");
 MODULE_LICENSE("GPL");
 
+/*
+ * TODO: When proposing as patch, add 'SKU' field to dmi-id.c/get_modalias()
+ *       and use that for Surface Pro 5 and Surface Laptop 3, if this doesn't
+ *       break the user-space API. If it does, consider not returning -ENODEV
+ *       in module_init function.
+ */
+
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro:*");
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro4:*");
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro6:*");
