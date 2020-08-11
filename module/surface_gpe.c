@@ -300,3 +300,14 @@ MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 MODULE_DESCRIPTION("Surface GPE/Lid Driver");
 MODULE_VERSION("0.1");
 MODULE_LICENSE("GPL");
+
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro4:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro6:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro7:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceBook:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceBook2:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceBook3:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceLaptop:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceLaptop2:*");
+MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfaceLaptop3:*");
