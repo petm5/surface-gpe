@@ -253,9 +253,11 @@ static int __init surface_gpe_init(void)
 	struct platform_device *pdev;
 	int status;
 
+	surface_gpe_device = NULL;
+
 	match = dmi_first_match(dmi_lid_device_table);
 	if (!match)
-		return -ENODEV;
+		return 0;
 
 	lid = match->driver_data;
 
@@ -289,6 +291,9 @@ static int __init surface_gpe_init(void)
 
 static void __exit surface_gpe_exit(void)
 {
+	if (!surface_gpe_device)
+		return;
+
 	platform_device_unregister(surface_gpe_device);
 	platform_driver_unregister(&surface_gpe);
 }
@@ -300,13 +305,6 @@ MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 MODULE_DESCRIPTION("Surface GPE/Lid Driver");
 MODULE_VERSION("0.1");
 MODULE_LICENSE("GPL");
-
-/*
- * TODO: When proposing as patch, add 'SKU' field to dmi-id.c/get_modalias()
- *       and use that for Surface Pro 5 and Surface Laptop 3, if this doesn't
- *       break the user-space API. If it does, consider not returning -ENODEV
- *       in module_init function.
- */
 
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro:*");
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro4:*");
