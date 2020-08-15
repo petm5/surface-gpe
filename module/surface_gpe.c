@@ -202,7 +202,7 @@ static int surface_gpe_probe(struct platform_device *pdev)
 	if (status)
 		return -EFAULT;
 
-	status = acpi_setup_gpe_for_wake(lid_handle, NULL, dev->gpe_number);
+	status = acpi_mark_gpe_for_wake(NULL, dev->gpe_number);
 	if (status)
 		return -EFAULT;
 
