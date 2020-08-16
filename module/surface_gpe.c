@@ -12,8 +12,6 @@
  * to enable those GPEs ourselves as a workaround.
  *
  * Link: https://lkml.org/lkml/2018/12/17/224
- *
- * Microsoft Surface devices
  */
 
 #include <linux/acpi.h>
