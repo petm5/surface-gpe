@@ -303,7 +303,6 @@ module_exit(surface_gpe_exit);
 
 MODULE_AUTHOR("Maximilian Luz <luzmaximilian@gmail.com>");
 MODULE_DESCRIPTION("Surface GPE/Lid Driver");
-MODULE_VERSION("0.1");
 MODULE_LICENSE("GPL");
 
 MODULE_ALIAS("dmi:*:svnMicrosoftCorporation:pnSurfacePro:*");
