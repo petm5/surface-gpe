@@ -4,10 +4,7 @@
 *.mod
 *.mod.c
 *.mod.o
-*.o.cmd
-*.ko.cmd
-*.mod.cmd
-*.mod.o.cmd
+*.cmd
 *.d
 Module.symvers
 modules.order
