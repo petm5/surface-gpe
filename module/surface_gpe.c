@@ -225,7 +225,7 @@ static int surface_gpe_remove(struct platform_device *pdev)
 	return 0;
 }
 
-static struct platform_driver surface_gpe = {
+static struct platform_driver surface_gpe_driver = {
 	.probe = surface_gpe_probe,
 	.remove = surface_gpe_remove,
 	.driver = {
@@ -256,27 +256,27 @@ static int __init surface_gpe_init(void)
 
 	lid = match->driver_data;
 
-	status = platform_driver_register(&surface_gpe);
+	status = platform_driver_register(&surface_gpe_driver);
 	if (status)
 		return status;
 
 	pdev = platform_device_alloc("surface_gpe", PLATFORM_DEVID_NONE);
 	if (!pdev) {
-		platform_driver_unregister(&surface_gpe);
+		platform_driver_unregister(&surface_gpe_driver);
 		return -ENOMEM;
 	}
 
 	status = platform_device_add_data(pdev, lid, sizeof(*lid));
 	if (status) {
 		platform_device_put(pdev);
-		platform_driver_unregister(&surface_gpe);
+		platform_driver_unregister(&surface_gpe_driver);
 		return status;
 	}
 
 	status = platform_device_add(pdev);
 	if (status) {
 		platform_device_put(pdev);
-		platform_driver_unregister(&surface_gpe);
+		platform_driver_unregister(&surface_gpe_driver);
 		return status;
 	}
 
@@ -290,7 +290,7 @@ static void __exit surface_gpe_exit(void)
 		return;
 
 	platform_device_unregister(surface_gpe_device);
-	platform_driver_unregister(&surface_gpe);
+	platform_driver_unregister(&surface_gpe_driver);
 }
 
 module_init(surface_gpe_init);
