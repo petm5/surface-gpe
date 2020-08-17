@@ -22,28 +22,23 @@
 
 
 struct surface_lid_device {
-	const char *acpi_path;
 	const u32 gpe_number;
 };
 
 
 static const struct surface_lid_device lid_device_l17 = {
-	.acpi_path = "\\_SB.LID0",
 	.gpe_number = 0x17,
 };
 
 static const struct surface_lid_device lid_device_l4D = {
-	.acpi_path = "\\_SB.LID0",
 	.gpe_number = 0x4D,
 };
 
 static const struct surface_lid_device lid_device_l4F = {
-	.acpi_path = "\\_SB.LID0",
 	.gpe_number = 0x4F,
 };
 
 static const struct surface_lid_device lid_device_l57 = {
-	.acpi_path = "\\_SB.LID0",
 	.gpe_number = 0x57,
 };
 
@@ -190,15 +185,10 @@ static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume
 static int surface_gpe_probe(struct platform_device *pdev)
 {
 	struct surface_lid_device *dev = pdev->dev.platform_data;
-	acpi_handle lid_handle;
 	int status;
 
 	if (!dev)
 		return -ENODEV;
-
-	status = acpi_get_handle(NULL, (acpi_string)dev->acpi_path, &lid_handle);
-	if (status)
-		return -EFAULT;
 
 	status = acpi_mark_gpe_for_wake(NULL, dev->gpe_number);
 	if (status)
