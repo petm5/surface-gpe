@@ -152,7 +152,7 @@ static int surface_lid_enable_wakeup(const struct surface_lid_device *dev,
 				     bool enable)
 {
 	int action = enable ? ACPI_GPE_ENABLE : ACPI_GPE_DISABLE;
-	int status;
+	acpi_status status;
 
 	status = acpi_set_gpe_wake_mask(NULL, dev->gpe_number, action);
 	if (status)
