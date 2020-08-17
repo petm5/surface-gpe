@@ -148,13 +148,13 @@ static const struct dmi_system_id dmi_lid_device_table[] = {
 };
 
 
-static int surface_lid_enable_wakeup(const struct surface_lid_device *dev,
+static int surface_lid_enable_wakeup(const struct surface_lid_device *lid,
 				     bool enable)
 {
 	int action = enable ? ACPI_GPE_ENABLE : ACPI_GPE_DISABLE;
 	acpi_status status;
 
-	status = acpi_set_gpe_wake_mask(NULL, dev->gpe_number, action);
+	status = acpi_set_gpe_wake_mask(NULL, lid->gpe_number, action);
 	if (status)
 		return -EINVAL;
 
@@ -164,18 +164,18 @@ static int surface_lid_enable_wakeup(const struct surface_lid_device *dev,
 
 static int surface_gpe_suspend(struct device *dev)
 {
-	const struct surface_lid_device *ldev;
+	const struct surface_lid_device *lid;
 
-	ldev = dev_get_platdata(dev);
-	return surface_lid_enable_wakeup(ldev, true);
+	lid = dev_get_platdata(dev);
+	return surface_lid_enable_wakeup(lid, true);
 }
 
 static int surface_gpe_resume(struct device *dev)
 {
-	const struct surface_lid_device *ldev;
+	const struct surface_lid_device *lid;
 
-	ldev = dev_get_platdata(dev);
-	return surface_lid_enable_wakeup(ldev, false);
+	lid = dev_get_platdata(dev);
+	return surface_lid_enable_wakeup(lid, false);
 }
 
 static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume);
@@ -183,24 +183,24 @@ static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume
 
 static int surface_gpe_probe(struct platform_device *pdev)
 {
-	const struct surface_lid_device *dev;
+	const struct surface_lid_device *lid;
 	int status;
  
- 	dev = dev_get_platdata(&pdev->dev);
-	if (!dev)
+ 	lid = dev_get_platdata(&pdev->dev);
+	if (!lid)
 		return -ENODEV;
 
-	status = acpi_mark_gpe_for_wake(NULL, dev->gpe_number);
+	status = acpi_mark_gpe_for_wake(NULL, lid->gpe_number);
 	if (status)
 		return -EINVAL;
 
-	status = acpi_enable_gpe(NULL, dev->gpe_number);
+	status = acpi_enable_gpe(NULL, lid->gpe_number);
 	if (status)
 		return -EINVAL;
 
-	status = surface_lid_enable_wakeup(dev, false);
+	status = surface_lid_enable_wakeup(lid, false);
 	if (status) {
-		acpi_disable_gpe(NULL, dev->gpe_number);
+		acpi_disable_gpe(NULL, lid->gpe_number);
 		return status;
 	}
 
@@ -209,11 +209,11 @@ static int surface_gpe_probe(struct platform_device *pdev)
 
 static int surface_gpe_remove(struct platform_device *pdev)
 {
-	struct surface_lid_device *dev = dev_get_platdata(&pdev->dev);
+	struct surface_lid_device *lid = dev_get_platdata(&pdev->dev);
 
 	/* restore default behavior without this module */
-	surface_lid_enable_wakeup(dev, false);
-	acpi_disable_gpe(NULL, dev->gpe_number);
+	surface_lid_enable_wakeup(lid, false);
+	acpi_disable_gpe(NULL, lid->gpe_number);
 
 	return 0;
 }
