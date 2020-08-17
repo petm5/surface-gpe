@@ -186,7 +186,7 @@ static int surface_gpe_probe(struct platform_device *pdev)
 	const struct surface_lid_device *dev;
 	int status;
  
- 	dev = pdev->dev.platform_data;
+ 	dev = dev_get_platdata(&pdev->dev);
 	if (!dev)
 		return -ENODEV;
 
