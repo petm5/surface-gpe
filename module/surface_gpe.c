@@ -156,7 +156,7 @@ static int surface_lid_enable_wakeup(const struct surface_lid_device *dev,
 
 	status = acpi_set_gpe_wake_mask(NULL, dev->gpe_number, action);
 	if (status)
-		return -EFAULT;
+		return -EINVAL;
 
 	return 0;
 }
@@ -192,11 +192,11 @@ static int surface_gpe_probe(struct platform_device *pdev)
 
 	status = acpi_mark_gpe_for_wake(NULL, dev->gpe_number);
 	if (status)
-		return -EFAULT;
+		return -EINVAL;
 
 	status = acpi_enable_gpe(NULL, dev->gpe_number);
 	if (status)
-		return -EFAULT;
+		return -EINVAL;
 
 	status = surface_lid_enable_wakeup(dev, false);
 	if (status) {
