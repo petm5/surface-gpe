@@ -166,7 +166,7 @@ static int surface_gpe_suspend(struct device *dev)
 {
 	const struct surface_lid_device *ldev;
 
-	ldev = dev_get_drvdata(dev);
+	ldev = dev_get_platdata(dev);
 	return surface_lid_enable_wakeup(ldev, true);
 }
 
@@ -174,7 +174,7 @@ static int surface_gpe_resume(struct device *dev)
 {
 	const struct surface_lid_device *ldev;
 
-	ldev = dev_get_drvdata(dev);
+	ldev = dev_get_platdata(dev);
 	return surface_lid_enable_wakeup(ldev, false);
 }
 
@@ -204,19 +204,17 @@ static int surface_gpe_probe(struct platform_device *pdev)
 		return status;
 	}
 
-	platform_set_drvdata(pdev, (void *)dev);
 	return 0;
 }
 
 static int surface_gpe_remove(struct platform_device *pdev)
 {
-	struct surface_lid_device *dev = platform_get_drvdata(pdev);
+	struct surface_lid_device *dev = dev_get_platdata(&pdev->dev);
 
 	/* restore default behavior without this module */
 	surface_lid_enable_wakeup(dev, false);
 	acpi_disable_gpe(NULL, dev->gpe_number);
 
-	platform_set_drvdata(pdev, NULL);
 	return 0;
 }
 
