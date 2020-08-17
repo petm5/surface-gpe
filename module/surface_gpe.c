@@ -22,7 +22,7 @@
 
 
 struct surface_lid_device {
-	const u32 gpe_number;
+	u32 gpe_number;
 };
 
 
@@ -184,7 +184,7 @@ static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume
 
 static int surface_gpe_probe(struct platform_device *pdev)
 {
-	struct surface_lid_device *dev = pdev->dev.platform_data;
+	const struct surface_lid_device *dev = pdev->dev.platform_data;
 	int status;
 
 	if (!dev)
@@ -204,7 +204,7 @@ static int surface_gpe_probe(struct platform_device *pdev)
 		return status;
 	}
 
-	platform_set_drvdata(pdev, dev);
+	platform_set_drvdata(pdev, (void *)dev);
 	return 0;
 }
 
