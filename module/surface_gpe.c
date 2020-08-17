@@ -148,15 +148,18 @@ static const struct dmi_system_id dmi_lid_device_table[] = {
 };
 
 
-static int surface_lid_enable_wakeup(const struct surface_lid_device *lid,
+static int surface_lid_enable_wakeup(struct device *dev,
+				     const struct surface_lid_device *lid,
 				     bool enable)
 {
 	int action = enable ? ACPI_GPE_ENABLE : ACPI_GPE_DISABLE;
 	acpi_status status;
 
 	status = acpi_set_gpe_wake_mask(NULL, lid->gpe_number, action);
-	if (status)
+	if (status) {
+		dev_err(dev, "failed to set GPE wake mask: %d\n", status);
 		return -EINVAL;
+	}
 
 	return 0;
 }
@@ -167,7 +170,7 @@ static int surface_gpe_suspend(struct device *dev)
 	const struct surface_lid_device *lid;
 
 	lid = dev_get_platdata(dev);
-	return surface_lid_enable_wakeup(lid, true);
+	return surface_lid_enable_wakeup(dev, lid, true);
 }
 
 static int surface_gpe_resume(struct device *dev)
@@ -175,7 +178,7 @@ static int surface_gpe_resume(struct device *dev)
 	const struct surface_lid_device *lid;
 
 	lid = dev_get_platdata(dev);
-	return surface_lid_enable_wakeup(lid, false);
+	return surface_lid_enable_wakeup(dev, lid, false);
 }
 
 static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume);
@@ -185,20 +188,24 @@ static int surface_gpe_probe(struct platform_device *pdev)
 {
 	const struct surface_lid_device *lid;
 	int status;
- 
+
  	lid = dev_get_platdata(&pdev->dev);
 	if (!lid)
 		return -ENODEV;
 
 	status = acpi_mark_gpe_for_wake(NULL, lid->gpe_number);
-	if (status)
+	if (status) {
+		dev_err(&pdev->dev, "failed to mark GPE for wake: %d\n", status);
 		return -EINVAL;
+	}
 
 	status = acpi_enable_gpe(NULL, lid->gpe_number);
-	if (status)
+	if (status) {
+		dev_err(&pdev->dev, "failed to enable GPE: %d\n", status);
 		return -EINVAL;
+	}
 
-	status = surface_lid_enable_wakeup(lid, false);
+	status = surface_lid_enable_wakeup(&pdev->dev, lid, false);
 	if (status) {
 		acpi_disable_gpe(NULL, lid->gpe_number);
 		return status;
@@ -212,7 +219,7 @@ static int surface_gpe_remove(struct platform_device *pdev)
 	struct surface_lid_device *lid = dev_get_platdata(&pdev->dev);
 
 	/* restore default behavior without this module */
-	surface_lid_enable_wakeup(lid, false);
+	surface_lid_enable_wakeup(&pdev->dev, lid, false);
 	acpi_disable_gpe(NULL, lid->gpe_number);
 
 	return 0;
@@ -242,8 +249,10 @@ static int __init surface_gpe_init(void)
 	surface_gpe_device = NULL;
 
 	match = dmi_first_match(dmi_lid_device_table);
-	if (!match)
+	if (!match) {
+		pr_info(KBUILD_MODNAME": no device detected, exiting\n");
 		return 0;
+	}
 
 	lid = match->driver_data;
 
