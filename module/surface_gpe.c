@@ -25,7 +25,6 @@ struct surface_lid_device {
 	u32 gpe_number;
 };
 
-
 static const struct surface_lid_device lid_device_l17 = {
 	.gpe_number = 0x17,
 };
@@ -184,9 +183,10 @@ static SIMPLE_DEV_PM_OPS(surface_gpe_pm, surface_gpe_suspend, surface_gpe_resume
 
 static int surface_gpe_probe(struct platform_device *pdev)
 {
-	const struct surface_lid_device *dev = pdev->dev.platform_data;
+	const struct surface_lid_device *dev;
 	int status;
-
+ 
+ 	dev = pdev->dev.platform_data;
 	if (!dev)
 		return -ENODEV;
 
