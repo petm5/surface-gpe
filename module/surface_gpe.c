@@ -246,8 +246,6 @@ static int __init surface_gpe_init(void)
 	struct platform_device *pdev;
 	int status;
 
-	surface_gpe_device = NULL;
-
 	match = dmi_first_match(dmi_lid_device_table);
 	if (!match) {
 		pr_info(KBUILD_MODNAME": no device detected, exiting\n");
