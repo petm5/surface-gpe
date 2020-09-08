@@ -1,17 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 /*
- * Surface GPE/Lid driver to enable wakeup from suspend via the lid.
- *
- * Conventionally, wake-up events for a specific device, e.g. the lid device,
- * are managed via the ACPI _PRW field. While this does not seem strictly
- * necessary based on ACPI spec, the kernel disables GPE wakeups to avoid
- * non-wakeup interrupts preventing suspend by default and only enables GPEs
- * associated via the _PRW field with a wake-up capable device.
- *
- * As there is no _PRW field on the lid device of MS Surface devices, we have
- * to enable those GPEs ourselves as a workaround.
- *
- * Link: https://lkml.org/lkml/2018/12/17/224
+ * Surface GPE/Lid driver to enable wakeup from suspend via the lid by
+ * properly configuring the respective GPEs.
  */
 
 #include <linux/acpi.h>
