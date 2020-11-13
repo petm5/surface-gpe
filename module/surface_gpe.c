@@ -138,7 +138,7 @@ static const struct dmi_system_id dmi_lid_device_table[] = {
 		.ident = "Surface Laptop 3 (Intel 13\")",
 		.matches = {
 			/*
-			 * We match for SKU here due to different vairants: The
+			 * We match for SKU here due to different variants: The
 			 * AMD (15") version does not rely on GPEs.
 			 */
 			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
@@ -150,7 +150,7 @@ static const struct dmi_system_id dmi_lid_device_table[] = {
 		.ident = "Surface Laptop 3 (Intel 15\")",
 		.matches = {
 			/*
-			 * We match for SKU here due to different vairants: The
+			 * We match for SKU here due to different variants: The
 			 * AMD (15") version does not rely on GPEs.
 			 */
 			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
