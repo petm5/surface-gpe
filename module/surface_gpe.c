@@ -284,7 +284,7 @@ static int surface_gpe_probe(struct platform_device *pdev)
 	return ret;
 }
 
-static int surface_gpe_remove(struct platform_device *pdev)
+static void surface_gpe_remove(struct platform_device *pdev)
 {
 	struct surface_lid_device *lid = dev_get_drvdata(&pdev->dev);
 
