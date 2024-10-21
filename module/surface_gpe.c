@@ -291,8 +291,6 @@ static void surface_gpe_remove(struct platform_device *pdev)
 	/* restore default behavior without this module */
 	surface_lid_enable_wakeup(&pdev->dev, false);
 	acpi_disable_gpe(NULL, lid->gpe_number);
-
-	return 0;
 }
 
 static struct platform_driver surface_gpe_driver = {
